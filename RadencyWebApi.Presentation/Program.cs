@@ -2,6 +2,7 @@ using FluentValidation.AspNetCore;
 using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
+using NLog.Web;
 using RadencyWebApi.DataAccess;
 using RadencyWebApi.DataAccess.Helpers;
 using RadencyWebApi.Domain.Configs;
@@ -13,6 +14,8 @@ using RadencyWebApi.Presentation.Middlewares;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers()
                 .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Program>());
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
 builder.Services.AddDbContext<DataContext>(t => t.UseInMemoryDatabase("in-memory-db"));
 builder.Services.AddTransient<DataSeeder>();
 builder.Services.AddScoped<IBookService, BookService>();
@@ -28,6 +31,6 @@ app.UseMiddleware<ErrorMiddleware>();
 var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
 using var scope = scopedFactory.CreateScope();
 var dataSeeder = scope.ServiceProvider.GetService<DataSeeder>();
-dataSeeder.Seed();
+await dataSeeder.SeedAsync();
 
 app.Run();

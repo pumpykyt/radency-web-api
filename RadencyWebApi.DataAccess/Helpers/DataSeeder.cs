@@ -8,7 +8,7 @@ public class DataSeeder
 
     public DataSeeder(DataContext context) => _context = context;
 
-    public async Task Seed()
+    public async Task SeedAsync()
     {
         var books = new List<Book>
         {
@@ -100,8 +100,44 @@ public class DataSeeder
                 Score = 2
             }
         };
+
+        var reviews = new List<Review>
+        {
+            new Review
+            {
+                BookId = 2,
+                Message = "weghwehg",
+                Reviewer = "Jason"
+            },
+            new Review
+            {
+                BookId = 2,
+                Message = "j4j4j",
+                Reviewer = "Valera"
+            },
+            new Review
+            {
+                BookId = 1,
+                Message = "233h3nn",
+                Reviewer = "Alex"
+            },
+            new Review
+            {
+                BookId = 3,
+                Message = "enjen",
+                Reviewer = "Valera"
+            },
+            new Review
+            {
+                BookId = 4,
+                Message = "hewhn",
+                Reviewer = "Jason"
+            }
+        };
         
         await _context.AddRangeAsync(ratings);
+        await _context.AddRangeAsync(reviews);
         await _context.SaveChangesAsync();
+        
     }
 }

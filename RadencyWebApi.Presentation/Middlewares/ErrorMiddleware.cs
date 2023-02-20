@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text;
 using Newtonsoft.Json;
 using RadencyWebApi.Domain.Exceptions;
 
@@ -7,10 +8,12 @@ namespace RadencyWebApi.Presentation.Middlewares;
 public class ErrorMiddleware
 {
     private readonly RequestDelegate _next;
+    private readonly ILogger<ErrorMiddleware> _logger;
 
-    public ErrorMiddleware(RequestDelegate next)
+    public ErrorMiddleware(RequestDelegate next, ILogger<ErrorMiddleware> logger)
     {
         _next = next;
+        _logger = logger;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -28,6 +31,14 @@ public class ErrorMiddleware
     private async Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
         object errors = null;
+        
+        var errorStringBody = new StringBuilder();
+        errorStringBody.Append($"Utc DateTime: {DateTime.UtcNow}");
+        errorStringBody.Append($"Http Method: {context.Request.Method}\n");
+        errorStringBody.Append($"Request Headers: {context.Request.Headers}\n");
+        errorStringBody.Append($"Request Query Params: {context.Request.QueryString}\n");
+        errorStringBody.Append($"Request Body:\n{context.Request.Body}\n");
+        _logger.LogError(errorStringBody.ToString());
 
         switch (ex)
         {
