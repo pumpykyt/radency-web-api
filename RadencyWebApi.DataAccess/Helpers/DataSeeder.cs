@@ -86,5 +86,22 @@ public class DataSeeder
 
         await _context.AddRangeAsync(books);
         await _context.SaveChangesAsync();
+
+        var ratings = new List<Rating>
+        {
+            new Rating
+            {
+                BookId = 1,
+                Score = 5
+            },
+            new Rating
+            {
+                BookId = 1,
+                Score = 2
+            }
+        };
+        
+        await _context.AddRangeAsync(ratings);
+        await _context.SaveChangesAsync();
     }
 }

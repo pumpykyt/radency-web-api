@@ -1,6 +1,9 @@
+using Mapster;
+using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using RadencyWebApi.DataAccess;
 using RadencyWebApi.DataAccess.Helpers;
+using RadencyWebApi.Domain.Configs;
 using RadencyWebApi.Domain.Interfaces;
 using RadencyWebApi.Domain.Mapping;
 using RadencyWebApi.Domain.Services;
@@ -11,8 +14,11 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<DataContext>(t => t.UseInMemoryDatabase("in-memory-db"));
 builder.Services.AddTransient<DataSeeder>();
 builder.Services.AddScoped<IBookService, BookService>();
-builder.Services.AddAutoMapper(typeof(MappingProfile));
-
+var typeAdapterConfig = TypeAdapterConfig.GlobalSettings;
+typeAdapterConfig.Scan(typeof(MappingRegistration).Assembly);
+var mapperConfig = new Mapper(typeAdapterConfig);
+builder.Services.AddSingleton<IMapper>(mapperConfig);
+builder.Services.Configure<SecretPhraseConfig>(builder.Configuration.GetSection("SecretPhraseConfig"));
 
 var app = builder.Build();
 app.UseHttpsRedirection();
