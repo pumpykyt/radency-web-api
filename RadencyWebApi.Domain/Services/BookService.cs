@@ -102,8 +102,9 @@ public class BookService : IBookService
             return new BookCreateResponse { Id = newEntity.Id };
         }
 
-        var entityExists = await _context.Books.AnyAsync(t => t.Id == request.Id);
-        if (!entityExists)
+        var bookExists = await _context.Books.AsNoTracking()
+                                             .AnyAsync(t => t.Id == request.Id);
+        if (!bookExists)
         {
             throw new HttpException(HttpStatusCode.NotFound);
         }
@@ -116,7 +117,8 @@ public class BookService : IBookService
 
     public async Task<ReviewCreateResponse> CreateBookReviewAsync(ReviewCreateRequest request, int bookId)
     {
-        var bookExists = await _context.Books.AnyAsync(t => t.Id == bookId);
+        var bookExists = await _context.Books.AsNoTracking()
+                                             .AnyAsync(t => t.Id == bookId);
         if (!bookExists)
         {
             throw new HttpException(HttpStatusCode.NotFound);
@@ -126,5 +128,24 @@ public class BookService : IBookService
         await _context.AddAsync(entity);
         await _context.SaveChangesAsync();
         return new ReviewCreateResponse { Id = entity.Id };
+    }
+
+    public async Task<RatingResponse> RateBookAsync(RatingCreateRequest request, int bookId)
+    {
+        var bookExists = await _context.Books.AsNoTracking()
+                                             .AnyAsync(t => t.Id == bookId);
+        
+        if (!bookExists)
+        {
+            throw new HttpException(HttpStatusCode.NotFound);
+        }
+
+        var entity = _mapper.Map<RatingCreateRequest, Rating>(request);
+        entity.BookId = bookId;
+
+        await _context.AddAsync(entity);
+        await _context.SaveChangesAsync();
+
+        return new RatingResponse { Score = entity.Score };
     }
 }

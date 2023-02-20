@@ -11,4 +11,5 @@ public interface IBookService
     Task<BookDetailedResponse> GetBookWithDetailsAsync(int bookId, string secret);
     Task<BookCreateResponse> CreateBookAsync(BookCreateRequest request);
     Task<ReviewCreateResponse> CreateBookReviewAsync(ReviewCreateRequest request, int bookId);
+    Task<RatingResponse> RateBookAsync(RatingCreateRequest request, int bookId);
 }

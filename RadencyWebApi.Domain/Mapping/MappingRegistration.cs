@@ -20,5 +20,6 @@ public class MappingRegistration : IRegister
 
         config.NewConfig<BookCreateRequest, Book>();
         config.NewConfig<ReviewCreateRequest, Review>();
+        config.NewConfig<RatingCreateRequest, Rating>();
     }
 }

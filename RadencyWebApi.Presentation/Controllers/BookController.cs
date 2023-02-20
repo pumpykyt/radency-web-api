@@ -31,4 +31,8 @@ public class BookController : ControllerBase
     [HttpPut("books/{bookId}/review")]
     public async Task<IActionResult> ReviewBookAsync([FromRoute] int bookId, [FromBody] ReviewCreateRequest request) 
         => Ok(await _bookService.CreateBookReviewAsync(request, bookId));
+    
+    [HttpPut("books/{bookId}/rate")]
+    public async Task<IActionResult> RateBookAsync([FromRoute] int bookId, [FromBody] RatingCreateRequest request) 
+        => Ok(await _bookService.RateBookAsync(request, bookId));
 }
