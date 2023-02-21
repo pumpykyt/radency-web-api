@@ -12,6 +12,16 @@ using RadencyWebApi.Domain.Services;
 using RadencyWebApi.Presentation.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        b =>
+        {
+            b.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
 builder.Services.AddControllers()
                 .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Program>());
 builder.Logging.ClearProviders();
@@ -25,6 +35,7 @@ var mapperConfig = new Mapper(typeAdapterConfig);
 builder.Services.AddSingleton<IMapper>(mapperConfig);
 builder.Services.Configure<SecretPhraseConfig>(builder.Configuration.GetSection("SecretPhraseConfig"));
 var app = builder.Build();
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.MapControllers();
 app.UseMiddleware<ErrorMiddleware>();
