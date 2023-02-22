@@ -21,8 +21,12 @@ public class BookController : ControllerBase
         => Ok(await _bookService.GetTopTenBooksWithReviewsCountGreaterThanTenAsync(genre));
 
     [HttpGet("books/{bookId}")]
-    public async Task<IActionResult> GetBookById([FromRoute] int bookId, [FromQuery] string secret) 
-        => Ok(await _bookService.GetBookWithDetailsAsync(bookId, secret));
+    public async Task<IActionResult> GetBookById([FromRoute] int bookId) 
+        => Ok(await _bookService.GetBookWithDetailsAsync(bookId));
+    
+    [HttpDelete("books/{bookId}")]
+    public async Task<IActionResult> DeleteBookById([FromRoute] int bookId, [FromQuery] string secret) 
+        => Ok(await _bookService.DeleteBookAsync(bookId, secret));
     
     [HttpPost("books/save")]
     public async Task<IActionResult> CreateOrUpdateBook([FromBody] BookCreateRequest request) 

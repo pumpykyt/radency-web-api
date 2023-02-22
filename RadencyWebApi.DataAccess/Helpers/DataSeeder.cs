@@ -97,7 +97,7 @@ public class DataSeeder
             new Rating
             {
                 BookId = 1,
-                Score = 2
+                Score = 3
             }
         };
 
@@ -114,6 +114,72 @@ public class DataSeeder
                 BookId = 2,
                 Message = "j4j4j",
                 Reviewer = "Valera"
+            },
+            new Review
+            {
+                BookId = 1,
+                Message = "233h3nn",
+                Reviewer = "Alex"
+            },
+            new Review
+            {
+                BookId = 1,
+                Message = "233h3nn",
+                Reviewer = "Alex"
+            },
+            new Review
+            {
+                BookId = 1,
+                Message = "233h3nn",
+                Reviewer = "Alex"
+            },
+            new Review
+            {
+                BookId = 1,
+                Message = "233h3nn",
+                Reviewer = "Alex"
+            },
+            new Review
+            {
+                BookId = 1,
+                Message = "233h3nn",
+                Reviewer = "Alex"
+            },
+            new Review
+            {
+                BookId = 1,
+                Message = "233h3nn",
+                Reviewer = "Alex"
+            },
+            new Review
+            {
+                BookId = 1,
+                Message = "233h3nn",
+                Reviewer = "Alex"
+            },
+            new Review
+            {
+                BookId = 1,
+                Message = "233h3nn",
+                Reviewer = "Alex"
+            },
+            new Review
+            {
+                BookId = 1,
+                Message = "233h3nn",
+                Reviewer = "Alex"
+            },
+            new Review
+            {
+                BookId = 1,
+                Message = "233h3nn",
+                Reviewer = "Alex"
+            },
+            new Review
+            {
+                BookId = 1,
+                Message = "233h3nn",
+                Reviewer = "Alex"
             },
             new Review
             {

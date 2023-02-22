@@ -70,13 +70,8 @@ public class BookService : IBookService
         return _mapper.Map<List<Book>, List<BookAbridgedResponse>>(await query.ToListAsync());
     }
 
-    public async Task<BookDetailedResponse> GetBookWithDetailsAsync(int bookId, string secret)
+    public async Task<BookDetailedResponse> GetBookWithDetailsAsync(int bookId)
     {
-        if (secret != _secretPhraseConfig.Secret)
-        {
-            throw new HttpException(HttpStatusCode.Unauthorized);
-        }
-
         var book = await _context.Books.AsNoTracking()
                                        .Include(t => t.Reviews)
                                        .Include(t => t.Ratings)
@@ -128,6 +123,25 @@ public class BookService : IBookService
         await _context.AddAsync(entity);
         await _context.SaveChangesAsync();
         return new ReviewCreateResponse { Id = entity.Id };
+    }
+
+    public async Task<bool> DeleteBookAsync(int bookId, string secret)
+    {
+        if (secret != _secretPhraseConfig.Secret)
+        {
+            throw new HttpException(HttpStatusCode.Unauthorized);
+        }
+
+        var book = await _context.Books.SingleOrDefaultAsync(t => t.Id == bookId);
+        if (book is null)
+        {
+            throw new HttpException(HttpStatusCode.NotFound);
+        }
+
+        _context.Remove(book);
+        
+        var result = await _context.SaveChangesAsync();
+        return result > 0;
     }
 
     public async Task<RatingResponse> RateBookAsync(RatingCreateRequest request, int bookId)
